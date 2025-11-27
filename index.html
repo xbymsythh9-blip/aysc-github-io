@@ -1,1 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暗影市场 | Shadow Market</title>
+    
+    <!-- 引用你的CSS文件 -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- 引用你的JavaScript文件 -->
+    <script src="script.js" defer></script> 
+    <!-- 添加 'defer' 属性让脚本在HTML解析完后再加载，避免阻塞页面渲染 -->
+</head>
+<body>
 
+    <h1>暗影市场</h1>
+    
+    <div id="products-container">
+        <!-- 产品列表将由你的JavaScript代码动态生成 -->
+    </div>
+
+    <div id="matrixBg"></div> <!-- 矩阵雨背景的画布容器 -->
+    
+    <!-- 支付模态框 -->
+    <div id="paymentModal" class="payment-modal">
+        <div class="payment-modal-content">
+            <span class="close">&times;</span>
+            <h2>购买产品</h2>
+            <div class="product-details">
+                <p>您选择的商品详情和支付步骤将在这里显示。</p>
+            </div>
+            <div class="payment-address" id="paymentAddressDisplay">TAY3N8ifLV7Gfp42WALiui1fVD4b9PL9KX</div>
+            <div class="payment-buttons">
+                <button class="payment-btn copy" onclick="copyPaymentAddress()">复制地址</button>
+                <button class="payment-btn close" onclick="closePaymentModal()">关闭</button>
+            </div>
+            <p class="payment-notice">注意: 请勿在支付备注中提及具体产品信息</p>
+        </div>
+    </div>
+
+</body>
+</html>
