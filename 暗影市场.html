@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暗影市场 | 高级访问卡密商店</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: #0a0a0a;
+            color: #00ff41;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        /* 首页容器 */
+        .home-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        
+        /* 商店容器 */
+        .shop-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: none;
+        }
+        
+        header {
+            text-align: center;
+            padding: 2rem 0;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            animation: scanline 8s linear infinite;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3rem;
+            text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41;
+            margin-bottom: 1rem;
+            animation: glow 2s infinite alternate, pulse 3s infinite;
+        }
+        
+        .subtitle {
+            color: #00c3ff;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 5px #00c3ff;
+        }
+        
+        .tagline {
+            font-style: italic;
+            color: #7e7e7e;
+        }
+        
+        .terminal-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .prompt {
+            color: #00ff41;
+            margin-right: 0.5rem;
+        }
+        
+        .blink {
+            animation: blink 1s infinite;
+        }
+        
+        .enter-btn {
+            display: inline-block;
+            background: transparent;
+            color: #00ff41;
+            border: 2px solid #00ff41;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+        
+        .enter-btn:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 20px #00ff41;
+            transform: translateY(-2px);
+        }
+        
+        .enter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .enter-btn:hover::before {
+            left: 100%;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 1px solid #00ff41;
+            color: #7e7e7e;
+            font-size: 0.9rem;
+        }
+        
+        /* 商店页面样式 */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .product-card {
+            background: rgba(10, 20, 15, 0.7);
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 65, 0.2);
+            border-color: #00c3ff;
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .product-card:hover::before {
+            left: 100%;
+        }
+        
+        .product-title {
+            color: #00c3ff;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #00ff41;
+            padding-bottom: 0.5rem;
+        }
+        
+        .product-description {
+            color: #b8b8b8;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .product-price {
+            color: #00ff41;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .buy-btn {
+            display: inline-block;
+            background: transparent;
+            color: #00ff41;
+            border: 1px solid #00ff41;
+            padding: 0.7rem 1.5rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .buy-btn:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px #00ff41;
+        }
+        
+        /* 支付区域样式 */
+        .payment-section {
+            background: rgba(10, 15, 20, 0.8);
+            border: 1px solid #00c3ff;
+            border-radius: 5px;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            box-shadow: 0 0 15px rgba(0, 195, 255, 0.3);
+        }
+        
+        .payment-title {
+            color: #00c3ff;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            text-shadow: 0 0 10px #00c3ff;
+        }
+        
+        .payment-address {
+            background: rgba(0, 195, 255, 0.1);
+            padding: 1rem;
+            border-radius: 5px;
+            word-break: break-all;
+            font-family: monospace;
+            margin: 1rem 0;
+            color: #00ff41;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: 1px solid #00c3ff;
+            color: #00c3ff;
+            padding: 0.5rem 1rem;
+            margin-left: 1rem;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: #00c3ff;
+            color: #0a0a0a;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: transparent;
+            color: #ff0040;
+            border: 1px solid #ff0040;
+            padding: 0.7rem 1.5rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-top: 2rem;
+        }
+        
+        .back-btn:hover {
+            background: #ff0040;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px #ff0040;
+        }
+        
+        .payment-notice {
+            color: #ff0040;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        /* 支付模态框样式 */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        
+        .payment-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .payment-content {
+            background: rgba(10, 20, 15, 0.9);
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+        }
+        
+        .payment-title {
+            color: #00ff41;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .payment-product {
+            color: #00c3ff;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .payment-price {
+            color: #00ff41;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .payment-steps {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .payment-step {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 1.5rem;
+            color: #b8b8b8;
+        }
+        
+        .payment-step::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #00ff41;
+        }
+        
+        .payment-address {
+            background: rgba(0, 255, 65, 0.1);
+            padding: 1rem;
+            border-radius: 5px;
+            word-break: break-all;
+            font-family: monospace;
+            margin: 1rem 0;
+            color: #00ff41;
+        }
+        
+        .payment-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .payment-btn {
+            display: inline-block;
+            background: transparent;
+            color: #00ff41;
+            border: 1px solid #00ff41;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .payment-btn:hover {
+            background: #00ff41;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px #00ff41;
+        }
+        
+        .payment-btn.copy {
+            background: rgba(0, 255, 65, 0.1);
+        }
+        
+        .payment-btn.close {
+            background: transparent;
+            color: #ff0040;
+            border-color: #ff0040;
+        }
+        
+        .payment-btn.close:hover {
+            background: #ff0040;
+            color: #0a0a0a;
+            box-shadow: 0 0 15px #ff0040;
+        }
+        
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px #00ff41;
+            }
+            to {
+                text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41;
+            }
+        }
+        
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+		
+		/* 新增：下载按钮样式 */
+.download-btn {
+    display: inline-block;
+    background: transparent;
+    color: #00c3ff; /* 使用青蓝色区分 */
+    border: 1px solid #00c3ff;
+    padding: 0.7rem 1.5rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px; /* 与购买按钮的间距 */
+}
+
+.download-btn:hover {
+    background: #00c3ff;
+    color: #0a0a0a;
+    box-shadow: 0 0 15px #00c3ff;
+}
+    </style>
+</head>
+<body>
+    <div class="matrix-bg" id="matrixBg"></div>
+    
+    <!-- 首页 -->
+    <div class="home-container" id="homePage">
+        <header>
+            <h1>暗影市场</h1>
+            <div class="subtitle">> 高级访问卡密商店</div>
+            <p class="tagline">// 安全、匿名、可靠 - 自 2015-2025 年以来服务精英用户</p>
+            
+            <div class="terminal-line">
+			    <span class="blink">$</span>
+                <span class="prompt"></span>
+                <span id="typing-text"></span>
+                <span class="blink">$</span>
+            </div>
+        </header>
+        
+        <a href="#" class="enter-btn" id="enterShop">进入商店</a>
+        
+        <footer>
+            <p>警告：本网站仅供授权访问。未经授权的访问尝试将被记录并报告。</p>
+            <p>© 2025 暗影市场. 所有交易均为最终交易，不提供退款。</p>
+        </footer>
+    </div>
+    
+    <!-- 商店页面 -->
+    <div class="shop-container" id="shopPage">
+        <header>
+            <h1>暗影市场</h1>
+            <div class="subtitle">> 高级卡密商店</div>
+            <p class="tagline">// 选择您的精英工具</p>
+        </header>
+        
+        <main>
+            <div class="products-grid" id="productsContainer">
+                <!-- 产品卡片将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 支付区域 -->
+            <div class="payment-section">
+                <h2 class="payment-title">TRON (TRX) 加密货币支付</h2>
+                <p style="text-align: center; margin-bottom: 1rem;">使用TRON区块链进行安全、匿名的支付</p>
+                
+                <div class="payment-address">
+                    TRON地址: <span id="tron-address">TAY3N8ifLV7Gfp42WALiui1fVD4b9PL9KX</span>
+                    <button onclick="copyTronAddress()" class="copy-btn">复制地址</button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 1rem;">
+                    <p style="color: #7e7e7e; font-size: 0.9rem;">
+                        客服Telegram: <span style="color: #00c3ff;">@shadowmarket_support</span>
+                    </p>
+                    <p class="payment-notice">
+                        注意: 请勿在支付备注中提及具体产品信息，仅通过Telegram联系客服提供详情
+                    </p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="back-btn" id="backToHome">返回首页</button>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 支付模态框 -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-content">
+            <h2 class="payment-title">确认购买</h2>
+            <div class="payment-product" id="paymentProductName"></div>
+            <div class="payment-price" id="paymentProductPrice"></div>
+            
+            <div class="payment-steps">
+                <div class="payment-step">1. 复制下方TRON地址</div>
+                <div class="payment-step">2. 通过您的TRON钱包发送相应金额</div>
+                <div class="payment-step">3. 通过Telegram联系客服提供交易哈希(TXID)</div>
+                <div class="payment-step">4. 获取激活码并开始使用</div>
+            </div>
+            
+            <div class="payment-address">TAY3N8ifLV7Gfp42WALiui1fVD4b9PL9KX</div>
+            
+            <div class="payment-buttons">
+                <button class="payment-btn copy" onclick="copyPaymentAddress()">复制地址</button>
+                <button class="payment-btn close" onclick="closePaymentModal()">关闭</button>
+            </div>
+            
+            <p class="payment-notice">注意: 请勿在支付备注中提及具体产品信息</p>
+        </div>
+    </div>
+    
+    <script>
+        // 产品数据
+        const products = [
+            {
+                id: 1,
+                title: "高级VPN访问",
+                description: "无限带宽，无日志政策，全球服务器网络。",
+                price: "$99.99"
+            },
+            {
+                id: 2,
+                title: "渗透测试工具包",
+                description: "专业级安全评估工具集合，定期更新。",
+                price: "$699.99"
+            },
+            {
+                id: 3,
+                title: "匿名通信协议",
+                description: "端到端加密通信系统，防止监控和追踪。",
+                price: "$9999.99"
+            },
+            {
+                id: 4,
+                title: "数据恢复套件",
+                description: "高级数据恢复工具，支持多种文件系统。",
+                price: "$99.99"
+            },
+            {
+                id: 5,
+                title: "工具与服务",
+                description: "网站 / 系统渗透测试，数据删除 / 修改，社交媒体账号劫持。",
+                price: "$999.99"
+            },
+            {
+                id: 6,
+                title: "棋牌工具破解",
+                description: "透视、智能识别牌型、胜率分析、防检测技术。",
+                price: "$99.99"
+            }
+        ];
+
+        // 创建矩阵背景
+        function createMatrixBackground() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const container = document.getElementById('matrixBg');
+            
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            container.appendChild(canvas);
+            
+            const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン";
+            const fontSize = 16;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+            
+            for (let i = 0; i < columns; i++) {
+                drops[i] = {
+                    y: Math.random() * -canvas.height,
+                    speed: 2 + Math.random() * 5,
+                    opacity: 0.1 + Math.random() * 0.9
+                };
+            }
+            
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = '#00ff41';
+                ctx.font = fontSize + 'px monospace';
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                    const x = i * fontSize;
+                    
+                    ctx.fillStyle = `rgba(0, 255, 65, ${drops[i].opacity})`;
+                    ctx.fillText(text, x, drops[i].y);
+                    
+                    if (drops[i].y > canvas.height && Math.random() > 0.975) {
+                        drops[i].y = -fontSize;
+                        drops[i].opacity = 0.1 + Math.random() * 0.9;
+                        drops[i].speed = 2 + Math.random() * 5;
+                    }
+                    
+                    drops[i].y += drops[i].speed;
+                }
+            }
+            
+            setInterval(draw, 33);
+            
+            window.addEventListener('resize', function() {
+                canvas.width = container.clientWidth;
+                canvas.height = container.clientHeight;
+            });
+        }
+        
+        // 打字机效果
+        function typeWriter(element, text, speed = 80) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    const r = Math.floor(Math.random() * 100);
+                    const g = 255;
+                    const b = Math.floor(65 + Math.random() * 100);
+                    element.style.color = `rgb(${r}, ${g}, ${b})`;
+                    
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed + Math.random() * 50);
+                } else {
+                    element.style.color = '#00ff41';
+                }
+            }
+            
+            type();
+        }
+        
+        // 生成产品卡片
+        function generateProductCards() {
+            const container = document.getElementById('productsContainer');
+            
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                card.innerHTML = `
+                    <h3 class="product-title">${product.title}</h3>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-price">${product.price}</div>
+                    <button class="buy-btn" data-product="${product.id}">立即购买</button>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        // 复制TRON地址
+        function copyTronAddress() {
+            const address = document.getElementById('tron-address').textContent;
+            navigator.clipboard.writeText(address).then(() => {
+                showNotification('TRON地址已复制到剪贴板');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制地址');
+            });
+        }
+        
+        // 复制支付地址
+        function copyPaymentAddress() {
+            const address = "TAY3N8ifLV7Gfp42WALiui1fVD4b9PL9KX";
+            navigator.clipboard.writeText(address).then(() => {
+                showNotification('TRON地址已复制到剪贴板');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('复制失败，请手动复制地址');
+            });
+        }
+        
+        // 显示通知
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.background = '#00ff41';
+            notification.style.color = '#0a0a0a';
+            notification.style.padding = '10px 15px';
+            notification.style.borderRadius = '5px';
+            notification.style.zIndex = '3000';
+            notification.style.fontWeight = 'bold';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 2000);
+        }
+        
+        // 显示商店页面
+        function showShopPage() {
+            document.getElementById('homePage').style.display = 'none';
+            document.getElementById('shopPage').style.display = 'block';
+        }
+        
+        // 显示首页
+        function showHomePage() {
+            document.getElementById('shopPage').style.display = 'none';
+            document.getElementById('homePage').style.display = 'flex';
+        }
+        
+        // 显示支付模态框
+        function showPaymentModal(productName, productPrice) {
+            document.getElementById('paymentProductName').textContent = productName;
+            document.getElementById('paymentProductPrice').textContent = productPrice;
+            document.getElementById('paymentModal').classList.add('show');
+        }
+        
+        // 关闭支付模态框
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.remove('show');
+        }
+        
+        // 初始化购买按钮
+        function setupBuyButtons() {
+            document.querySelectorAll('.buy-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const productCard = this.closest('.product-card');
+                    const productName = productCard.querySelector('.product-title').textContent;
+                    const productPrice = productCard.querySelector('.product-price').textContent;
+                    showPaymentModal(productName, productPrice);
+                });
+            });
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            createMatrixBackground();
+            generateProductCards();
+            setupBuyButtons();
+            
+            // 启动打字机效果
+            const typingElement = document.getElementById('typing-text');
+            const textToType = "欢迎来到暗影市场。请谨慎选择您的工具。";
+            typeWriter(typingElement, textToType, 80);
+            
+            // 绑定事件监听器
+            document.getElementById('enterShop').addEventListener('click', function(e) {
+                e.preventDefault();
+                showShopPage();
+            });
+            
+            document.getElementById('backToHome').addEventListener('click', function(e) {
+                e.preventDefault();
+                showHomePage();
+            });
+        });
+    </script>
+</body>
+</html>
