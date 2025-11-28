@@ -3,41 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>暗影市场 | Shadow Market</title>
-    
-    <!-- 引用你的CSS文件 -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- 引用你的JavaScript文件 -->
-    <script src="script.js" defer></script> 
-    <!-- 添加 'defer' 属性让脚本在HTML解析完后再加载，避免阻塞页面渲染 -->
+    <title>暗影市场 | Shadow Market - 首页</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <h1>暗影市场</h1>
-    
-    <div id="products-container">
-        <!-- 产品列表将由你的JavaScript代码动态生成 -->
-    </div>
-
-    <div id="matrixBg"></div> <!-- 矩阵雨背景的画布容器 -->
-    
-    <!-- 支付模态框 -->
-    <div id="paymentModal" class="payment-modal">
-        <div class="payment-modal-content">
-            <span class="close">&times;</span>
-            <h2>购买产品</h2>
-            <div class="product-details">
-                <p>您选择的商品详情和支付步骤将在这里显示。</p>
-            </div>
-            <div class="payment-address" id="paymentAddressDisplay">TAY3N8ifLV7Gfp42WALiui1fVD4b9PL9KX</div>
-            <div class="payment-buttons">
-                <button class="payment-btn copy" onclick="copyPaymentAddress()">复制地址</button>
-                <button class="payment-btn close" onclick="closePaymentModal()">关闭</button>
-            </div>
-            <p class="payment-notice">注意: 请勿在支付备注中提及具体产品信息</p>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">ShadowMarket</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="active">首页</a></li>
+                <li><a href="store.html">商店</a></li>
+                <li><a href="#about">关于我们</a></li>
+                <li><a href="#contact">联系方式</a></li>
+            </ul>
         </div>
-    </div>
+    </nav>
 
+    <!-- 主视觉区 -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>欢迎来到暗影市场</h1>
+            <p>您的专属数字产品交易站</p>
+            <div class="cta-buttons">
+                <a href="store.html" class="btn primary-btn">进入商店</a>
+                <a href="#about" class="btn secondary-btn">了解更多</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 热门产品预览 -->
+    <section class="products-preview">
+        <h2>热门产品推荐</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x200" alt="产品1">
+                <h3>数字加密套餐</h3>
+                <p>高级加密保护方案</p>
+                <span class="price">¥299</span>
+                <a href="store.html#p1" class="btn">查看详情</a>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x200" alt="产品2">
+                <h3>安全防护套件</h3>
+                <p>全方位安全解决方案</p>
+                <span class="price">¥599</span>
+                <a href="store.html#p2" class="btn">查看详情</a>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/300x200" alt="产品3">
+                <h3>数据恢复服务</h3>
+                <p>专业数据恢复方案</p>
+                <span class="price">¥899</span>
+                <a href="store.html#p3" class="btn">查看详情</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="about-section">
+        <h2>关于暗影市场</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>暗影市场成立于2025年，专注于提供安全可靠的数字产品交易服务。我们拥有超过10年的行业经验，服务全球500万+用户。</p>
+                <p>我们的使命：让每个人都能安全便捷地获取数字产品</p>
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number">5M+</div>
+                        <div class="stat-label">全球用户</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">产品类型</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">99.9%</div>
+                        <div class="stat-label">服务可用性</div>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image">
+                <img src="https://via.placeholder.com/500x400" alt="关于我们">
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <footer id="contact" class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱：support@shadowmarket.io</p>
+                <p>客服时间：24/7 全天候</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <ul>
+                    <li><a href="store.html">产品中心</a></li>
+                    <li><a href="#about">关于我们</a></li>
+                    <li><a href="#">隐私政策</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>关注我们</h3>
+                <div class="social-icons">
+                    <a href="#">📧</a>
+                    <a href="#">💬</a>
+                    <a href="#">📱</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 暗影市场 | 保留所有权利</p>
+        </div>
+    </footer>
 </body>
 </html>
