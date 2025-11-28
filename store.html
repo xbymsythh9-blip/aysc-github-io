@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购买产品 - 暗影市场</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">ShadowMarket</div>
+            <ul class="nav-menu">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="store.html" class="active">商店</a></li>
+                <li><a href="#about">关于我们</a></li>
+                <li><a href="#contact">联系方式</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 商店主区域 -->
+    <section class="store-section">
+        <div class="store-container">
+            <h1>购买产品</h1>
+            <p>您选择的商品详情和支付步骤将在这里显示</p>
+            
+            <!-- 订单信息 -->
+            <div class="order-info">
+                <div class="order-header">
+                    <h2>订单信息</h2>
+                    <span class="order-status">待支付</span>
+                </div>
+                <div class="order-details">
+                    <div class="order-item">
+                        <div class="item-img">
+                            <img src="https://via.placeholder.com/100" alt="产品图片">
+                        </div>
+                        <div class="item-details">
+                            <h3 id="p1" class="product-name">数字加密套餐 Pro</h3>
+                            <p class="product-desc">企业级加密解决方案</p>
+                            <span class="item-price">¥299.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="payment-section">
+                    <h3>支付信息</h3>
+                    <div class="payment-instruction">
+                        <p><strong>订单号：</strong>TAY3N8ifLV7Gfp42WALiui1fVD4b9PL9KX</p>
+                        <p><strong>金额：</strong>¥299.00</p>
+                        <p><strong>支付方式：</strong>加密货币/数字钱包</p>
+                        <div class="payment-warning">
+                            <strong>⚠️ 重要提醒：</strong> 请勿在支付备注中提及具体产品信息
+                        </div>
+                    </div>
+                    
+                    <button class="btn primary-btn" id="payBtn">立即支付</button>
+                    <a href="index.html" class="btn secondary-btn">返回首页</a>
+                </div>
+            </div>
+            
+            <!-- 其他产品推荐 -->
+            <div class="related-products">
+                <h3>您可能还喜欢</h3>
+                <div class="product-list">
+                    <div class="product-card-mini">
+                        <img src="https://via.placeholder.com/80" alt="产品">
+                        <div class="product-info">
+                            <h4>安全防护套件</h4>
+                            <span>¥599.00</span>
+                        </div>
+                    </div>
+                    <div class="product-card-mini">
+                        <img src="https://via.placeholder.com/80" alt="产品">
+                        <div class="product-info">
+                            <h4>数据恢复服务</h4>
+                            <span>¥899.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>需要帮助？</h3>
+                <p>客服邮箱：support@shadowmarket.io</p>
+            </div>
+            <div class="footer-section">
+                <h3>安全提示</h3>
+                <p>请确保通过官方渠道进行支付</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 暗影市场 | 安全交易保障</p>
+        </div>
+    </footer>
+
+    <!-- 支付弹窗 -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>支付确认</h2>
+            <div class="payment-form">
+                <p>请使用加密钱包扫描下方二维码完成支付</p>
+                <div class="qr-container">
+                    <img src="https://via.placeholder.com/200" alt="支付二维码">
+                </div>
+                <p class="payment-addr">支付地址: 3FZbgi29cpjq2GjdwV8eyHuJJnkLtktZc5</p>
+                <div class="payment-timer">
+                    <p>支付时间剩余: <span id="timer">15:00</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 支付弹窗逻辑
+        const modal = document.getElementById('paymentModal');
+        const btn = document.getElementById('payBtn');
+        const span = document.getElementsByClassName('close')[0];
+        
+        btn.onclick = function() {
+            modal.style.display = 'block';
+            startTimer();
+        }
+        
+        span.onclick = function() {
+            modal.style.display = 'none';
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // 支付倒计时
+        let timeLeft = 900; // 15分钟
+        const timerElement = document.getElementById('timer');
+        
+        function startTimer() {
+            const timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.textContent = "已超时";
+                    // 这里可以添加超时后的处理逻辑
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
